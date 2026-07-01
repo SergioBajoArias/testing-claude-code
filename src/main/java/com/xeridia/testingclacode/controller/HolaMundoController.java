@@ -19,4 +19,10 @@ public class HolaMundoController {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
+    @GetMapping("/mensaje")
+    public String mensaje() {
+        String radar = "Este es un mensaje de prueba";
+        return radar;
+    }
+
 }
