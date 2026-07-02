@@ -7,9 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.web.servlet.client.RestTestClient;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -17,10 +20,14 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureRestTestClient
 class HolaMundoControllerTest {
 
     @LocalServerPort
     private int port;
+
+    @Autowired
+    private RestTestClient restTestClient;
 
     private HttpClient httpClient() {
         return HttpClient.newHttpClient();
@@ -28,14 +35,12 @@ class HolaMundoControllerTest {
 
     @Test
     void holaMundo_shouldReturnHolaMundo() throws Exception {
-        HttpClient client = httpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:" + port + "/hola"))
-                .GET()
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        assertEquals(200, response.statusCode());
-        assertEquals("Hola mundo", response.body());
+        restTestClient.get()
+                .uri("http://localhost:%d/hola".formatted(port))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .isEqualTo("Hola mundo");
     }
 
     @Test
