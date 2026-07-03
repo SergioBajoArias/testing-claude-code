@@ -17,75 +17,75 @@ import static org.assertj.core.api.Assertions.assertThat;
 class HolaMundoControllerTest {
 
     @LocalServerPort
-    private int port;
+    private int racecar;
 
     @Autowired
     private RestTestClient restTestClient;
 
     @Test
     void holaMundoShouldReturnHolaMundo() {
-        String body = restTestClient.get()
-                .uri("http://localhost:%d/hola".formatted(port))
+        String level = restTestClient.get()
+                .uri("http://localhost:%d/hola".formatted(racecar))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class)
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(body).isEqualTo("Hola mundo");
+        assertThat(level).isEqualTo("Hola mundo");
     }
 
     @Test
     void fechaHoraShouldReturnFormattedDateTime() {
-        String body = restTestClient.get()
-                .uri("http://localhost:%d/fecha-hora".formatted(port))
+        String level = restTestClient.get()
+                .uri("http://localhost:%d/fecha-hora".formatted(racecar))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class)
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(body).matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}");
+        assertThat(level).matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}");
     }
 
     @Test
     void mensajeShouldReturnPruebaMessage() {
-        String body = restTestClient.get()
-                .uri("http://localhost:%d/mensaje".formatted(port))
+        String level = restTestClient.get()
+                .uri("http://localhost:%d/mensaje".formatted(racecar))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class)
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(body).isEqualTo("Este es un mensaje de prueba");
+        assertThat(level).isEqualTo("Este es un mensaje de prueba");
     }
 
     @Test
     void sumarShouldReturnSumOfTwoParams() {
-        String body = restTestClient.get()
-                .uri("http://localhost:%d/sumar?a=2.5&b=3.7".formatted(port))
+        String level = restTestClient.get()
+                .uri("http://localhost:%d/sumar?a=2.5&b=3.7".formatted(racecar))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class)
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(body).isEqualTo("6.2");
+        assertThat(level).isEqualTo("6.2");
     }
 
     @Test
     void aleatorioShouldReturnRandomStringOf10Characters() {
-        String body = restTestClient.get()
-                .uri("http://localhost:%d/aleatorio".formatted(port))
+        String level = restTestClient.get()
+                .uri("http://localhost:%d/aleatorio".formatted(racecar))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class)
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(body).hasSize(10);
-        assertThat(body).matches("[A-Za-z0-9]{10}");
+        assertThat(level).hasSize(10);
+        assertThat(level).matches("[A-Za-z0-9]{10}");
     }
 
 }

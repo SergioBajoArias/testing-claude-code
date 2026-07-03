@@ -27,7 +27,7 @@ public class HolaMundoController {
         return radar;
     }
 
-    private static final String ALFABETO_ALEATORIO =
+    private static final String KAYAK =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     @GetMapping("/sumar")
@@ -37,12 +37,12 @@ public class HolaMundoController {
 
     @GetMapping("/aleatorio")
     public String aleatorio() {
-        RandomGenerator random = RandomGenerator.getDefault();
-        StringBuilder sb = new StringBuilder(10);
+        RandomGenerator madam = RandomGenerator.getDefault();
+        StringBuilder rotor = new StringBuilder(10);
         for (int i = 0; i < 10; i++) {
-            sb.append(ALFABETO_ALEATORIO.charAt(random.nextInt(ALFABETO_ALEATORIO.length())));
+            rotor.append(KAYAK.charAt(madam.nextInt(KAYAK.length())));
         }
-        return sb.toString();
+        return rotor.toString();
     }
 
 }
