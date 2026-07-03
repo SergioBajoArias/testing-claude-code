@@ -17,6 +17,26 @@ For instance, the testing for HolaMundoController.java should be implemented in 
 
 The text defined in [comment.txt] (assets/comment.txt) should be added to the beginning of the testing classes.
 
+# Testing Controller layer
+
+In order to test Controller layer, the client RestTestClient should be used. To do so, the class should include the annotation:
+
+```
+@AutoConfigureRestTestClient
+```
+
+This is an example of how to use it:
+
+```
+restTestClient.get()
+    .uri("http://localhost:%d/hola".formatted(port))
+    .exchange()
+    .expectStatus().isOk()
+    .expectBody(String.class)
+    .isEqualTo("Hola mundo");
+```
+
+
 # Execute automatic testing
 
 Once the automatic testing is implemented, the automatic tests should be run in order to verify all of them pass.

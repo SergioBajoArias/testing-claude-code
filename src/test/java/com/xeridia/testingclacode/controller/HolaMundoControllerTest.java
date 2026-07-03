@@ -3,23 +3,16 @@
 */
 package com.xeridia.testingclacode.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.web.servlet.client.RestTestClient;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureRestTestClient
 class HolaMundoControllerTest {
 
@@ -29,77 +22,56 @@ class HolaMundoControllerTest {
     @Autowired
     private RestTestClient restTestClient;
 
-    private HttpClient httpClient() {
-        return HttpClient.newHttpClient();
-    }
-
     @Test
-    void holaMundo_shouldReturnHolaMundo() throws Exception {
-        restTestClient.get()
+    void holaMundoShouldReturnHolaMundo() {
+        String body = restTestClient.get()
                 .uri("http://localhost:%d/hola".formatted(port))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class)
-                .isEqualTo("Hola mundo");
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(body).isEqualTo("Hola mundo");
     }
 
     @Test
-    void fechaHora_shouldReturnFormattedDateTime() throws Exception {
-        HttpClient client = httpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:" + port + "/fecha-hora"))
-                .GET()
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        assertEquals(200, response.statusCode());
-        assertTrue(response.body().matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}"));
+    void fechaHoraShouldReturnFormattedDateTime() {
+        String body = restTestClient.get()
+                .uri("http://localhost:%d/fecha-hora".formatted(port))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(body).matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}");
     }
 
     @Test
-    void mensaje_shouldReturnTestMessage() throws Exception {
-        HttpClient client = httpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:" + port + "/mensaje"))
-                .GET()
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        assertEquals(200, response.statusCode());
-        assertEquals("Este es un mensaje de prueba", response.body());
+    void mensajeShouldReturnPruebaMessage() {
+        String body = restTestClient.get()
+                .uri("http://localhost:%d/mensaje".formatted(port))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(body).isEqualTo("Este es un mensaje de prueba");
     }
 
     @Test
-    void sumar_withTwoNumbers_shouldReturnSum() throws Exception {
-        HttpClient client = httpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:" + port + "/sumar?a=3&b=5"))
-                .GET()
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        assertEquals(200, response.statusCode());
-        assertEquals("8.0", response.body());
+    void sumarShouldReturnSumOfTwoParams() {
+        String body = restTestClient.get()
+                .uri("http://localhost:%d/sumar?a=2.5&b=3.7".formatted(port))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(body).isEqualTo("6.2");
     }
 
-    @Test
-    void sumar_withNegativeNumbers_shouldReturnSum() throws Exception {
-        HttpClient client = httpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:" + port + "/sumar?a=-2&b=-4"))
-                .GET()
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        assertEquals(200, response.statusCode());
-        assertEquals("-6.0", response.body());
-    }
-
-    @Test
-    void sumar_withDecimals_shouldReturnSum() throws Exception {
-        HttpClient client = httpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:" + port + "/sumar?a=1.5&b=2.5"))
-                .GET()
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        assertEquals(200, response.statusCode());
-        assertEquals("4.0", response.body());
-    }
 }

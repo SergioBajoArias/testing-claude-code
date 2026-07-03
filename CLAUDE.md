@@ -8,23 +8,21 @@ Guidance for Claude Code when working in this repository.
 
 - **Framework:** Spring Boot 4.1.0 (parent POM), `spring-boot-starter-web`
 - **Java:** 25
-- **Build:** Maven (wrapper present in `.mvn/`)
+- **Build:** Maven (installation in `C:\entornos\apache-maven-3.9.9\bin\mvn` directory)
 - **Not yet under git version control.**
 
 ## Build & run
 
-```bash
-# Run the app (starts embedded Tomcat, default port 8080)
-./mvnw spring-boot:run
+In order to use Maven with Java 25, set the JAVA_HOME environment variable in the same command. Also add the required parameters 
+to capture the output. For example:
 
-# Package
-./mvnw clean package
+```powershell
+# Run the app (starts embedded Tomcat, default port 8080)
+$env:JAVA_HOME = 'C:\Users\sergio.bajo\.jdks\openjdk-25; C:\entornos\apache-maven-3.9.9\bin\mvn.cmd spring-boot:run 2>&1 | Out-String
 
 # Run tests
-./mvnw test
+$env:JAVA_HOME = 'C:\Users\sergio.bajo\.jdks\openjdk-25; C:\entornos\apache-maven-3.9.9\bin\mvn.cmd test 2>&1 | Out-String
 ```
-
-On Windows PowerShell, use `.\mvnw.cmd` instead of `./mvnw` if the shell script isn't picked up.
 
 ## Layout
 
