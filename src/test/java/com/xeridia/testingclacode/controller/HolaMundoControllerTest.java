@@ -74,4 +74,18 @@ class HolaMundoControllerTest {
         assertThat(body).isEqualTo("6.2");
     }
 
+    @Test
+    void aleatorioShouldReturnRandomStringOf10Characters() {
+        String body = restTestClient.get()
+                .uri("http://localhost:%d/aleatorio".formatted(port))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(body).hasSize(10);
+        assertThat(body).matches("[A-Za-z0-9]{10}");
+    }
+
 }

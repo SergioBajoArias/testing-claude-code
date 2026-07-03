@@ -41,3 +41,4 @@ src/main/java/com/xeridia/testingclacode/
 - Keep the base package `com.xeridia.testingclacode`. New layers go in subpackages: `controller`, `service`, `repository`, `model`/`dto`, etc.
 - Tests live under `src/test/java` mirroring the main package; `spring-boot-starter-test` (JUnit 5, MockMvc, etc.) is available.
 - Uses Java 25 language features — do not introduce backports or older syntax unless required.
+- When a new method is implemented, a related automatic test should be implemented too. Tests should be run in order to check that they are working properly.
